@@ -2,5 +2,96 @@ package com.pluralsight.tacostore.models;
 
 import com.pluralsight.tacostore.interfaces.Printable;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import java.time.format.DateTimeFormatter;
+
 public class Receipt implements Printable {
+
+    private Order order;
+    private String fileName;
+
+    private static final String receiptDir = "receipts";
+    private static final DateTimeFormatter fileFormatter = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
+
+    public Receipt(Order order) {
+        this.order = order;
+        this.fileName = order.getOrderTime().format(fileFormatter) + ".txt";
+    }
+
+    public boolean saveReceipt(){
+        try {
+            new File(this.fileName).getParentFile().mkdirs();
+            String filePath = fileFormatter + "/" + this.fileName;
+            try(BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))){
+                bw.write(formatReceipt());
+            }
+            System.out.println("\n ✅ Receipt saves to: " + filePath);
+            return true;
+
+        } catch (IOException e) {
+            System.out.println("\n ❌ There was an error saving receipt: " + e.getMessage());
+            return false;
+        }
+    }
+    @Override
+    public String formatDisplay() {
+        return String.join("\n",
+                "▐████████████████████████████████████▌",
+                headerRow("ORDER CONFIRMED"),
+                "▐───────────────────────────────────▌",
+                row("Receipt saved to:"),
+                row(fileFormatter + "/" + fileName),
+                "▐───────────────────────────────────▌",
+                headerRow(String.format("TOTAL CHARGED:  $%.2f", order.getTotal())),
+                "▐████████████████████████████████████▌"
+        );
+    }
+
+    @Override
+    public String formatReceipt() {
+        DateTimeFormatter displayFormat =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        String itemLines = order.getItems().stream()
+                .map(item -> item.formatReceipt() +
+                        "\n-----------------------------------------")
+                .reduce("", String::concat);
+
+        return String.format("""
+                =========================================
+                       EL PUESTO  |  ORDER RECEIPT
+                =========================================
+                  Date: %s
+                -----------------------------------------
+                %s
+                  TOTAL:  $%.2f
+                =========================================
+                       Thank you! See you next time.
+                =========================================
+                """,
+                order.getOrderTime().format(displayFormat),
+                itemLines,
+                order.getTotal());
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────
+
+    private String row(String text) {
+        return String.format("▐█  %-34s█▌", text);
+    }
+
+    private String headerRow(String text) {
+        return String.format("▐██ %-33s██▌", text);
+    }
+
+    // ── Getters ───────────────────────────────────────────────────
+
+    public Order getOrder()      { return order; }
+    public String getFileName()  { return fileName; }
+
+
 }
