@@ -1,6 +1,7 @@
 package com.pluralsight.tacostore.models;
 
 import com.pluralsight.tacostore.interfaces.Printable;
+import com.pluralsight.tacostore.services.DisplayUtils;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -24,8 +25,8 @@ public class Receipt implements Printable {
 
     public boolean saveReceipt(){
         try {
-            new File(this.fileName).getParentFile().mkdirs();
-            String filePath = fileFormatter + "/" + this.fileName;
+            new File(receiptDir).mkdirs();
+            String filePath = receiptDir + "/" + this.fileName;
             try(BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))){
                 bw.write(formatReceipt());
             }
@@ -41,10 +42,10 @@ public class Receipt implements Printable {
     public String formatDisplay() {
         return String.join("\n",
                 "▐████████████████████████████████████▌",
-                headerRow("ORDER CONFIRMED"),
+                DisplayUtils.headerRow("ORDER CONFIRMED ✅"),
                 "▐───────────────────────────────────▌",
                 row("Receipt saved to:"),
-                row(fileFormatter + "/" + fileName),
+                row("File: " + fileName),
                 "▐───────────────────────────────────▌",
                 headerRow(String.format("TOTAL CHARGED:  $%.2f", order.getTotal())),
                 "▐████████████████████████████████████▌"
@@ -63,14 +64,14 @@ public class Receipt implements Printable {
 
         return String.format("""
                 =========================================
-                       EL PUESTO  |  ORDER RECEIPT
+                       STACKS & SALSA  |  ORDER RECEIPT
                 =========================================
                   Date: %s
                 -----------------------------------------
                 %s
                   TOTAL:  $%.2f
                 =========================================
-                       Thank you! See you next time.
+                       Thank you! See you next time. 🌮
                 =========================================
                 """,
                 order.getOrderTime().format(displayFormat),
