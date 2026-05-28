@@ -398,7 +398,7 @@ public class TacoScreen {
         System.out.println();
         System.out.println(DisplayUtils.THICK);
         System.out.println(" STACKS & SALSA 🌯 |  LET'S BUILD A TACO ");
-        System.out.println("  Handcrafted  •  Fresh  •  Made your way");
+        System.out.println(" Handcrafted  •  Fresh  •  Made your way");
         System.out.println(DisplayUtils.THICK);
         System.out.println();
     }

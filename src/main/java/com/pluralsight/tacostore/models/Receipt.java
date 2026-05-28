@@ -64,14 +64,14 @@ public class Receipt implements Printable {
 
         return String.format("""
                 =========================================
-                       STACKS & SALSA  |  ORDER RECEIPT
+                     STACKS & SALSA  |  ORDER RECEIPT
                 =========================================
                   Date: %s
                 -----------------------------------------
                 %s
                   TOTAL:  $%.2f
                 =========================================
-                       Thank you! See you next time. 🌮
+                     Thank you! See you next time. 🌮
                 =========================================
                 """,
                 order.getOrderTime().format(displayFormat),

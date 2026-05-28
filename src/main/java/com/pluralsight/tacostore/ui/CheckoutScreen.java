@@ -40,7 +40,7 @@ public class CheckoutScreen {
         System.out.println(receipt.formatDisplay());
 
         System.out.print("\n  Press Enter to return to the main menu...");
-        sc.nextLine();
+//        sc.nextLine();
         DisplayUtils.clearScreen(5);
     }
 

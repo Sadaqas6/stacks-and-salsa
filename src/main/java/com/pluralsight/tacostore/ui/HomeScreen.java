@@ -38,7 +38,7 @@ public class HomeScreen {
                     DisplayUtils.clearScreen(5);
                     printGoodbye();
                 }
-                default -> System.out.println("\n ❌ Incorrect option Please try again.\n");
+                default -> System.out.println("\n ❌ Incorrect option. Please try again.");
             }
 
         }

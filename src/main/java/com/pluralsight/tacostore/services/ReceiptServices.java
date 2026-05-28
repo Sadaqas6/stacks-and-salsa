@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 public class ReceiptServices {
 
-    private static final String receiptDir = "receipts";
+    private static final String receiptDir = "receipts/receipts";
 
 
     public String readReceipt(String fileName) {
