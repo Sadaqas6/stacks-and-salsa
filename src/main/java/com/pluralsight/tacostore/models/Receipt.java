@@ -41,14 +41,14 @@ public class Receipt implements Printable {
     @Override
     public String formatDisplay() {
         return String.join("\n",
-                "▐████████████████████████████████████▌",
-                DisplayUtils.headerRow("ORDER CONFIRMED ✅"),
-                "▐───────────────────────────────────▌",
-                row("Receipt saved to:"),
-                row("File: " + fileName),
-                "▐───────────────────────────────────▌",
-                headerRow(String.format("TOTAL CHARGED:  $%.2f", order.getTotal())),
-                "▐████████████████████████████████████▌"
+                DisplayUtils.THICK,
+                "ORDER CONFIRMED ✅",
+                DisplayUtils.THIN,
+                "Receipt saved to:",
+                "File: " + fileName,
+                DisplayUtils.THIN,
+                String.format("TOTAL CHARGED:  $%.2f", order.getTotal()),
+                DisplayUtils.THICK
         );
     }
 
@@ -78,18 +78,6 @@ public class Receipt implements Printable {
                 itemLines,
                 order.getTotal());
     }
-
-    // ── Helpers ───────────────────────────────────────────────────
-
-    private String row(String text) {
-        return String.format("▐█  %-34s█▌", text);
-    }
-
-    private String headerRow(String text) {
-        return String.format("▐██ %-33s██▌", text);
-    }
-
-    // ── Getters ───────────────────────────────────────────────────
 
     public Order getOrder()      { return order; }
     public String getFileName()  { return fileName; }

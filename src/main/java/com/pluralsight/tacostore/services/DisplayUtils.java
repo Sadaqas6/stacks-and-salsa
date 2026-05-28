@@ -1,6 +1,27 @@
 package com.pluralsight.tacostore.services;
 
 public class DisplayUtils {
+
+    public static final String GREEN = "\u001B[32m";
+    public static final String WHITE = "\u001B[97m";
+    public static final String RED   = "\u001B[31m";
+    public static final String RESET = "\u001B[0m";
+    public static final String BOLD  = "\u001B[1m";
+
+
+    public static final String THICK = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
+    public static final String THIN  = "───────────────────────────────────────";
+
+
+    public static String row(String text) {
+        return "  " + text;
+    }
+
+    public static String headerRow(String text) {
+        return "  " + text;
+    }
+
+
     public static void animateLoading(String message, int dots, int delayMs) {
         System.out.print("\n  " + message + "  ");
         try {
@@ -33,41 +54,21 @@ public class DisplayUtils {
         }
     }
 
-    // Live Price Counter
+
     public static void showLivePrice(double price) {
         System.out.println(
-                "▐───────────────────────────────────▌\n" +
-                        String.format("▐█  💰 RUNNING TOTAL:  $%-13.2f█▌", price) + "\n" +
-                        "▐───────────────────────────────────▌"
+                THIN + "\n" +
+                        String.format("  💰 Running Total:  $%.2f", price) + "\n" +
+                        THIN
         );
     }
 
-    public static final String THICK  = "▐████████████████████████████████████▌";
-    public static final String THIN   = "▐───────────────────────────────────▌";
 
-    public static String row(String text) {
-        return String.format("▐█  %-34s█▌", text);
-    }
 
-    public static String headerRow(String text) {
-        return String.format("▐██ %-33s██▌", text);
-    }
-
-    // Clear Screen
-    public static void clearScreen() {
-        try {
-            String os = System.getProperty("os.name");
-            if (os.contains("Windows")) {
-                new ProcessBuilder("cmd", "/c", "cls")
-                        .inheritIO().start().waitFor();
-            } else {
-                System.out.print("\033[H\033[2J");
-                System.out.flush();
-            }
-        } catch (Exception e) {
-            // if clear fails just print blank lines
-            System.out.println("\n\n\n\n\n");
+    public static void clearScreen(int lines) {
+        for (int i = 0; i < lines; i++) {
+            System.out.println();
         }
     }
-}
 
+}

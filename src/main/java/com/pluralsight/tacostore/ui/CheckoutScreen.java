@@ -15,7 +15,7 @@ public class CheckoutScreen {
         this.order = order;
     }
     public void display(){
-        DisplayUtils.clearScreen();
+        DisplayUtils.clearScreen(5);
         displayOrderReview();
         displayConfirmMenu();
 
@@ -32,7 +32,7 @@ public class CheckoutScreen {
     // ── Confirm ───────────────────────────────────────────────────
     private void confirmOrder() {
         DisplayUtils.animateLoading("Processing your order", 4, 350);
-        DisplayUtils.clearScreen();
+        DisplayUtils.clearScreen(5);
 
         Receipt receipt = new Receipt(order);
         receipt.saveReceipt();
@@ -41,12 +41,12 @@ public class CheckoutScreen {
 
         System.out.print("\n  Press Enter to return to the main menu...");
         sc.nextLine();
-        DisplayUtils.clearScreen();
+        DisplayUtils.clearScreen(5);
     }
 
     // ── Cancel ────────────────────────────────────────────────────
     private void cancelOrder() {
-        DisplayUtils.clearScreen();
+        DisplayUtils.clearScreen(5);
         System.out.println(String.join("\n",
                 "",
                 DisplayUtils.THICK,
@@ -62,14 +62,14 @@ public class CheckoutScreen {
             Thread.currentThread().interrupt();
         }
 
-        DisplayUtils.clearScreen();
+        DisplayUtils.clearScreen(5);
     }
 
     private void displayOrderReview() {
         System.out.println(String.join("\n",
                 "",
                 DisplayUtils.THICK,
-                DisplayUtils.headerRow("🌮 STACKS & SALSA 🌯"),
+                DisplayUtils.headerRow(" STACKS & SALSA 🌯"),
                 DisplayUtils.headerRow("REVIEW YOUR ORDER"),
                 DisplayUtils.THICK,
                 ""

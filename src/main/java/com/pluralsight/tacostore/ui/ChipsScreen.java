@@ -1,6 +1,7 @@
 package com.pluralsight.tacostore.ui;
 
 import com.pluralsight.tacostore.models.ChipsAndSalsa;
+import com.pluralsight.tacostore.services.DisplayUtils;
 
 import java.util.Scanner;
 
@@ -12,25 +13,27 @@ public class ChipsScreen {
             "Habanero", "Mild", "Extra Hot"
     };
 
-    public ChipsScreen(Scanner scanner) {
-        this.sc = scanner;
+    public ChipsScreen(Scanner sc) {
+        this.sc = sc;
     }
 
     public ChipsAndSalsa display() {
-        System.out.println("\n" + String.join("\n",
-                "▐████████████████████████████████████▌",
-                headerRow("CHIPS & SALSA  —  $1.50"),
-                "▐───────────────────────────────────▌",
-                row("SELECT YOUR SALSA:"),
-                row("1)  Salsa Verde"),
-                row("2)  Salsa Roja"),
-                row("3)  Chipotle"),
-                row("4)  Habanero"),
-                row("5)  Mild"),
-                row("6)  Extra Hot"),
-                row("0)  Back"),
-                "▐████████████████████████████████████▌"
-        ));
+        DisplayUtils.clearScreen(5);
+        System.out.println();
+        System.out.println(DisplayUtils.THICK);
+        System.out.println("  CHIPS & SALSA  🥗  —  $1.50");
+        System.out.println(DisplayUtils.THICK);
+        System.out.println();
+        System.out.println("  SELECT YOUR SALSA:");
+        System.out.println(DisplayUtils.THIN);
+        System.out.println("  1)  Salsa Verde");
+        System.out.println("  2)  Salsa Roja");
+        System.out.println("  3)  Chipotle");
+        System.out.println("  4)  Habanero");
+        System.out.println("  5)  Mild");
+        System.out.println("  6)  Extra Hot");
+        System.out.println("  0)  Back");
+        System.out.println(DisplayUtils.THIN);
         System.out.print("\n  Select an option: ");
 
         String choice = sc.nextLine().trim();
@@ -48,13 +51,4 @@ public class ChipsScreen {
         }
         return null;
     }
-
-    private String row(String text) {
-        return String.format("▐█  %-34s█▌", text);
-    }
-
-    private String headerRow(String text) {
-        return String.format("▐██ %-33s██▌", text);
-    }
 }
-

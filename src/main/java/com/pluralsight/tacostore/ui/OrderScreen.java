@@ -4,6 +4,8 @@ import com.pluralsight.tacostore.models.ChipsAndSalsa;
 import com.pluralsight.tacostore.models.Drink;
 import com.pluralsight.tacostore.models.Order;
 import com.pluralsight.tacostore.models.Taco;
+import com.pluralsight.tacostore.services.DisplayUtils;
+import com.pluralsight.tacostore.services.OrderServices;
 
 
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ public class OrderScreen {
     private Order order;
 
     public OrderScreen(Scanner sc) {
-        this.sc = sc;
+        this.sc    = sc;
         this.order = new Order();
     }
 
@@ -25,6 +27,7 @@ public class OrderScreen {
         boolean ordering = true;
 
         while (ordering) {
+            DisplayUtils.clearScreen(2);
             displayOrderSummary();
             displayMenu();
 
@@ -36,8 +39,7 @@ public class OrderScreen {
                     Taco taco = tacoScreen.display();
                     if (taco != null) {
                         order.addItem(taco);
-                        System.out.println("\n" +
-                                " 🌮 Taco added to your order!\n");
+                        System.out.println("\n  🌮 Taco added to your order!\n");
                     }
                 }
                 case "2" -> {
@@ -45,8 +47,7 @@ public class OrderScreen {
                     Drink drink = drinkScreen.display();
                     if (drink != null) {
                         order.addItem(drink);
-                        System.out.println("\n" +
-                                " 🥤 Drink added to your order!\n");
+                        System.out.println("\n  🥤 Drink added to your order!\n");
                     }
                 }
                 case "3" -> {
@@ -54,8 +55,7 @@ public class OrderScreen {
                     ChipsAndSalsa chips = chipsScreen.display();
                     if (chips != null) {
                         order.addItem(chips);
-                        System.out.println("\n" +
-                                " 🥗 Chips & Salsa added to your order!\n");
+                        System.out.println("\n  🥗 Chips & Salsa added to your order!\n");
                     }
                 }
                 case "4" -> {
@@ -74,105 +74,70 @@ public class OrderScreen {
         }
     }
 
+
     private boolean canCheckout() {
-        boolean hasTaco = order.getItems().stream().anyMatch(item -> item instanceof Taco);
-        boolean hasDrink = order.getItems().stream().anyMatch(item -> item instanceof Drink);
-        boolean hasChips = order.getItems().stream().anyMatch(item -> item instanceof ChipsAndSalsa);
-
-        if (order.getItems().isEmpty()) {
-            System.out.println("""
-                    
-                    ▐████████████████████████████████████▌
-                    ▐██ CANNOT CHECKOUT                ██▌
-                    ▐───────────────────────────────────▌
-                    ▐█  Your order is empty!            █▌
-                    ▐████████████████████████████████████▌
-                    """);
-            return false;
+            if (!OrderServices.isValidOrder(order)) {
+                System.out.println("\n  " + OrderServices.getValidationMessage(order) + "\n");
+                return false;
+            }
+            return true;
         }
-        if (!hasTaco && !hasDrink && !hasChips) {
-            System.out.println("""
-                    
-                    ▐████████████████████████████████████▌
-                    ▐██ CANNOT CHECKOUT                 ██▌
-                    ▐───────────────────────────────────▌
-                    ▐█  No tacos? Add a drink or        █▌
-                    ▐█  chips & salsa to continue.      █▌
-                    ▐████████████████████████████████████▌
-                    """);
-            return false;
 
-        }
-        if (!hasTaco && !hasDrink && !hasChips) {
-            System.out.println("\n  ❌ No tacos? You must add a drink or chips & salsa.\n");
-            return false;
-        }
-        return true;
-    }
 
-    private void  displayOrderSummary(){
-
-        System.out.println("""
-                
-                ▐████████████████████████████████████▌
-                ▐██       STACKS & SALSA           ██▌
-                ▐██        CURRENT ORDER           ██▌
-                ▐████████████████████████████████████▌
-                """);
+    private void displayOrderSummary() {
+        System.out.println();
+        System.out.println(DisplayUtils.THICK);
+        System.out.println("  STACKS & SALSA  |  CURRENT ORDER");
+        System.out.println(DisplayUtils.THICK);
+        System.out.println();
 
         List<String> items = new ArrayList<>();
         for (var item : order.getItems()) {
             items.add(item.getDescription());
         }
-// reverse so newest shows first
+
         Collections.reverse(items);
 
         if (items.isEmpty()) {
-            System.out.println(row("No items yet."));
+            System.out.println("  No items yet.");
         } else {
-            items.forEach(i -> System.out.println(row(i)));
+            items.forEach(i -> System.out.println("  " + i));
         }
-        System.out.println("▐───────────────────────────────────▌");
-        System.out.println(headerRow(String.format("RUNNING TOTAL:  $%.2f", order.getTotal())));
-        System.out.println("▐████████████████████████████████████▌\n");
+
+        System.out.println();
+        System.out.println(DisplayUtils.THIN);
+        System.out.printf("  Running Total:  $%.2f%n", order.getTotal());
+        System.out.println(DisplayUtils.THIN);
+        System.out.println();
     }
 
+
     private void displayMenu() {
-        System.out.println(String.join("\n",
-                "▐████████████████████████████████████▌",
-                headerRow("WHAT WOULD YOU LIKE?"),
-                "▐───────────────────────────────────▌",
-                row("1)  Add Taco"),
-                row("2)  Add Drink"),
-                row("3)  Add Chips & Salsa"),
-                row("4)  Checkout"),
-                row("0)  Cancel Order"),
-                "▐████████████████████████████████████▌"
-        ));
+        System.out.println("  WHAT WOULD YOU LIKE?");
+        System.out.println(DisplayUtils.THIN);
+        System.out.println("  1)  Add Taco 🌮");
+        System.out.println("  2)  Add Drink 🥤");
+        System.out.println("  3)  Add Chips & Salsa 🥗");
+        System.out.println("  4)  Checkout 🛒");
+        System.out.println("  0)  Cancel Order");
+        System.out.println(DisplayUtils.THIN);
         System.out.print("\n  Select an option: ");
     }
 
+
     private void displayCancelled() {
-        System.out.println("""
-                
-                ▐████████████████████████████████████▌
-                ▐██ ORDER CANCELLED                ██▌
-                ▐───────────────────────────────────▌
-                ▐█  Your order has been deleted.    █▌
-                ▐█  Returning to main menu...       █▌
-                ▐████████████████████████████████████▌
-                """);
-    }
+        DisplayUtils.clearScreen(5);
+        System.out.println();
+        System.out.println(DisplayUtils.THICK);
+        System.out.println("  ORDER CANCELLED");
+        System.out.println(DisplayUtils.THIN);
+        System.out.println("  Your order has been deleted.");
+        System.out.println("  Returning to main menu...");
+        System.out.println(DisplayUtils.THICK);
+        System.out.println();
 
-    // ── Helpers ───────────────────────────────────────────────────
-    private String row(String text) {
-        return String.format("▐█  %-34s█▌", text);
-    }
-
-    private String headerRow(String text) {
-        return String.format("▐██ %-33s██▌", text);
+        try { Thread.sleep(1500); } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }
-
-
-
