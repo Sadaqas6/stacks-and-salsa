@@ -46,7 +46,7 @@ ui/           → HomeScreen, OrderScreen, TacoScreen, DrinkScreen, ChipsScreen,
 
 ## Class Diagram
 
-![Stacks & Salsa Class Diagram](docs/class-diagram.png)
+![Stacks & Salsa Class Diagram](class-diagram.png)
 
 ---
 
